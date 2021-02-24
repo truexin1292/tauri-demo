@@ -1,4 +1,5 @@
 name: release-tauri-app
+# 22
 on:
   push:
     branches:
