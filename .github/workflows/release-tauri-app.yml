@@ -1,11 +1,10 @@
 name: release-tauri-app
-# 22
 on:
   push:
     branches:
       - main
-      paths:
-        - '**/package.json'
+  #   paths:
+  #     - '**/package.json'
 jobs:
   check-build:
     runs-on: ubuntu-latest
