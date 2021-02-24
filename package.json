@@ -5,10 +5,13 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "tstart": "tauri dev",
+    "tbuild": "tauri build"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "tauri": "^0.14.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
