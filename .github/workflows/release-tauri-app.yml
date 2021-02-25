@@ -71,11 +71,9 @@ jobs:
       - name: build tauri.js
         working-directory: tauri-demo
         run: |
-          yarn build-release
-          yarn global add $PWD
-          echo "::add-path::$(yarn global bin)"
+          yarn build
       - name: install and build assets
-        working-directory: "example/${{ github.event.inputs.dir }}"
+        working-directory: "tauri-demo"
         run: ${{ github.event.inputs.buildAssets }}
       - name: build tauri app
         uses: tauri-apps/tauri-action@v0
@@ -83,10 +81,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           includeDebug: true
-          projectPath: "example/${{ github.event.inputs.dir }}"
+          projectPath: "tauri-demo"
           preferGlobal: true
       - uses: actions/upload-artifact@v2
         if: success()
         with:
           name: tauri-app.${{ matrix.platform }}
-          path: ${{ format('./{0}{1}/src-tauri/{2}/**', 'example/', github.event.inputs.dir, matrix.releaseFolder ) }}
+          path: ${{ format('./{0}{1}/src-tauri/{2}/**', '/', 'tauri-demo', matrix.releaseFolder ) }}
