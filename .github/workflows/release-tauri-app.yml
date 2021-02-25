@@ -11,13 +11,6 @@ jobs:
       fail-fast: false
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
-        include:
-          - platform: ubuntu-latest
-            releaseFolder: target/release/bundle/deb
-          - platform: macos-latest
-            releaseFolder: target/release/bundle/osx
-          - platform: windows-latest
-            releaseFolder: target/release/bundle/msi
 
     steps:
       - uses: actions/checkout@v2
