@@ -1,4 +1,5 @@
-name: build smoke test with source
+name: release tauric app
+
 on:
   workflow_dispatch:
     inputs:
@@ -45,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: tauri
+          path: tauri-demo
       - uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.repository }}
@@ -66,10 +67,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
       - name: yarn install for cli
-        working-directory: tauri/cli/tauri.js
+        working-directory: tauri-demo
         run: yarn
-      - name: build tauri.js
-        working-directory: tauri/cli/tauri.js
+      - name: build tauri-app
+        working-directory: tauri-demo
         run: |
           yarn build-release
           yarn global add $PWD

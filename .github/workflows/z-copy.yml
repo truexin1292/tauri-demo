@@ -1,4 +1,5 @@
-name: release-tauri-app
+name: release tauric app
+
 on:
   push:
     branches:
