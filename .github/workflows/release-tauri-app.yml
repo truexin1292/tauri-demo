@@ -1,29 +1,6 @@
-name: build smoke test with source
-on:
-  workflow_dispatch:
-    inputs:
-      repository:
-        description: "Repository from which to pull and create a Tauri app."
-        required: false
-        default: "truexin1292/tauri-demo"
-      ref:
-        description: "Branch or ref to pull down."
-        required: false
-        default: "main"
-      dir:
-        description: "Directory we expect to run in."
-        required: false
-        default: "tauri-demo"
-      buildAssets:
-        description: "Command to build the assets."
-        required: false
-        default: "echo no build needed"
-      buildTauri:
-        description: "Command to build the Tauri app."
-        required: false
-        default: "tauri-demo"
-env:
-  RUST_BACKTRACE: 1
+name: release-tauri-app
+
+on: workflow_dispatch
 
 jobs:
   create-and-upload-assets:
@@ -44,17 +21,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: tauri-demo
-      - uses: actions/checkout@v2
-        with:
-          repository: ${{ github.event.inputs.repository }}
-          ref: ${{ github.event.inputs.ref }}
-          path: example
       - name: setup node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 12
       - name: install rust stable
         uses: actions-rs/toolchain@v1
         with:
@@ -65,26 +35,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
-      - name: yarn install for cli
-        working-directory: tauri-demo
-        run: yarn
-      - name: build tauri.js
-        working-directory: tauri-demo
-        run: |
-          yarn build
-      - name: install and build assets
-        working-directory: "tauri-demo"
-        run: ${{ github.event.inputs.buildAssets }}
-      - name: build tauri app
-        uses: tauri-apps/tauri-action@v0
+      - run: yarn
+      - name: build finatr for tauri app
+        run: yarn build
+      - run: cargo install tauri-bundler --force
+      - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           includeDebug: true
-          projectPath: "tauri-demo"
-          preferGlobal: true
-      - uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: tauri-app.${{ matrix.platform }}
-          path: ${{ format('./{0}{1}/src-tauri/{2}/**', '/', 'tauri-demo', matrix.releaseFolder ) }}
+          tagName: finatr-v__VERSION__
+          releaseName: "Release finatr app v__VERSION__"
+          releaseBody: "See the assets to download this version and install."
+          releaseDraft: true
+          prerelease: false
