@@ -6,8 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "tstart": "tauri dev",
-    "tbuild": "tauri build"
+    "tstart": "yarn tauri dev",
+    "tbuild": "yarn tauri build"
   },
   "dependencies": {
     "core-js": "^3.6.5",
