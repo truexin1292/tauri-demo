@@ -29,16 +29,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y webkit2gtk-4.0
       - run: yarn
-      - name: build tauri app
-        run: yarn build && yarn tbuild
+      - name: build tauri-demo for tauri app 
+        run: yarn build
       - run: cargo install tauri-bundler --force
-      # - uses: tauri-apps/tauri-action@v0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     includeDebug: true
-      #     tagName: tauri-demo-v__VERSION__
-      #     releaseName: "Release tauri-demo app v__VERSION__"
-      #     releaseBody: "See the assets to download this version and install."
-      #     releaseDraft: true
-      #     prerelease: false
+      — name: build tauri app
+        run: yarn tbuild
+      — name: upload release asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.RELEASE_UPLOAD_URL }}
+          asset_path: ${{ format('./src-tauri/target/release/{0}/nota{1}{2}', matrix.buildFolder, matrix.ext, matrix.compressed ) }}
+          asset_name: ${{ format('nota{0}{1}', matrix.ext, matrix.compressed ) }}
+          asset_content_type: application/zip
